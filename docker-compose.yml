@@ -8,8 +8,7 @@ services:
     stdin_open: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /dmnt/docker-manager:/docker-manager
-      - /dmnt/docker-master/key:/vol/key:ro
+      - <your_key_directory>:/vol/key:ro
     user: "root"
     network_mode: "host"
     command: bash -c "service ssh start && 
