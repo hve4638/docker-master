@@ -1,0 +1,20 @@
+version: '3'
+services:
+  dockermaster:
+    image: hve/dockermaster
+    container_name: docker-master
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dmnt/docker-manager:/docker-manager
+      - /dmnt/docker-master/key:/vol/key:ro
+    user: "root"
+    network_mode: "host"
+    command: bash -c "service ssh start && 
+          cp /vol/key/authorized_keys /home/master/.ssh/authorized_keys && 
+          chown master:master /home/master/.ssh/authorized_keys && 
+          chmod 600 /home/master/.ssh/authorized_keys && 
+          bash"
+    
