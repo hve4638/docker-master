@@ -14,15 +14,15 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-c
 RUN sed 's/#Port.*/Port 3022/' -i /etc/ssh/sshd_config \
 && sed 's/#AuthorizedKeysFile.*/PubkeyAuthentication yes/' -i /etc/ssh/sshd_config
 
-COPY .aliaslist /home/master/.aliaslist
-
-RUN addgroup master \
-&& useradd -u 1000 -m -d /home/master -g master master \
-&& chsh -s /bin/bash master \
+RUN addgroup --gid 1000 master \
+&& adduser --home /home/master --gid 1000 --shell /bin/bash --uid 1000 --gecos '' --disabled-password master \
 && mkdir -p /home/master/.ssh \
 && usermod -aG docker master \
-&& touch /home/master/.hushlogin \
-&& echo "source ~/.aliaslist" >> /home/master/.bashrc
+&& touch /home/master/.hushlogin
+
+COPY .aliaslist /home/master/.aliaslist
+
+RUN echo "source ~/.aliaslist" >> /home/master/.bashrc
 
 RUN mkdir /vol \
 && chmod 700 /vol
